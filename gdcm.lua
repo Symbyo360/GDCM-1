@@ -1,7 +1,7 @@
 project "gdcm"
 	-- uuid "C3BA937E-8404-4A94-A2AC-7D35855A6F69"
 	language "C++"
-	kind "None"
+	kind "Makefile"
 	targetdir (bin_path .. "/%{cfg.platform}/%{cfg.buildcfg}/")
 	location (build_path .. "/gdcm/")
 
@@ -12,8 +12,7 @@ project "gdcm"
 		os.mkdir(gdcm_location)
 	end
 
-	filter "system:windows"
-
+	if os.istarget("windows") then
 		cleancommands { "rmdir /Q /S \"" .. gdcm_path .. "\"" }
 
 		if os.getversion().majorversion == 10.0 then
@@ -24,15 +23,35 @@ project "gdcm"
 		filter "configurations:debug"
 			buildcommands
 			{
-				"cd " .. gdcm_location,
-				cmake_path .. " " .. gdcm_lib_path .. " -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
+				"cd \"" .. gdcm_location .. "\"",
+				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
 				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install"
 			}
 
 		filter "configurations:release"
 			buildcommands
 			{
-				"cd " .. gdcm_location,
-				cmake_path .. " " .. gdcm_lib_path .. " -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
+				"cd \"" .. gdcm_location .. "\"",
+				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
 				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Release"
 			}
+
+	elseif os.istarget("linux") then
+		cleancommands { "rm -R \"" .. gdcm_path .. "\"" }
+
+		filter "configurations:debug"
+			buildcommands
+			{
+				"cd \"" .. gdcm_location .. "\"",
+				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
+				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install"
+			}
+
+		filter "configurations:release"
+			buildcommands
+			{
+				"cd \"" .. gdcm_location .. "\"",
+				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
+				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Release"
+			}
+	end
