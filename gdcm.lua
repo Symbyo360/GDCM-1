@@ -25,7 +25,7 @@ project "gdcm"
 			{
 				"cd \"" .. gdcm_location .. "\"",
 				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DCMAKE_DEBUG_POSTFIX=\"\" -DGDCM_BUILD_SHARED_LIBS=ON",
-				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Debug -- -j 8"
+				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Debug"
 			}
 
 		filter "configurations:release"
@@ -33,7 +33,7 @@ project "gdcm"
 			{
 				"cd \"" .. gdcm_location .. "\"",
 				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
-				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Release -- -j 8"
+				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Release"
 			}
 
 	elseif os.istarget("linux") then
