@@ -1,5 +1,4 @@
 project "gdcm"
-	-- uuid "C3BA937E-8404-4A94-A2AC-7D35855A6F69"
 	language "C++"
 	kind "Makefile"
 	targetdir (bin_path .. "/%{cfg.platform}/%{cfg.buildcfg}/")
@@ -32,7 +31,7 @@ project "gdcm"
 			buildcommands
 			{
 				"cd \"" .. gdcm_location .. "\"",
-				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "debug") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
+				cmake_path .. " \"" .. gdcm_lib_path .. "\" -G \"Visual Studio 15 Win64\" -DCMAKE_INSTALL_PREFIX=\"" .. path.join(gdcm_path, "release") .. "\" -DGDCM_BUILD_SHARED_LIBS=ON",
 				cmake_path .. " " .. " --build \"" .. gdcm_location .. "\" --target install --config Release"
 			}
 
